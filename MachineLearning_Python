@@ -1,0 +1,93 @@
+MachineLearning_Python_read.md
+
+1. Anomaly Detection using Isolation Forest
+Scenario: Detecting fraudulent transactions in a dataset using anomaly detection.
+Work Proof:
+python
+Copy
+Edit
+from sklearn.ensemble import IsolationForest
+import numpy as np
+import pandas as pd
+
+# Generating synthetic transaction data (Amount, Time Interval)
+np.random.seed(42)
+data = np.random.normal(size=(100, 2))  # Normal transactions
+anomalies = np.random.uniform(low=-5, high=5, size=(5, 2))  # Fraudulent transactions
+dataset = np.vstack([data, anomalies])
+df = pd.DataFrame(dataset, columns=["Amount", "Time_Interval"])
+
+# Training Isolation Forest model
+model = IsolationForest(contamination=0.05, random_state=42)
+df['Anomaly_Score'] = model.fit_predict(df[["Amount", "Time_Interval"]])
+
+# Identifying anomalies
+anomalies_detected = df[df['Anomaly_Score'] == -1]
+print("Anomalies Detected:\n", anomalies_detected)
+Outcome: The model successfully detects outlier transactions, helping to identify potential fraud.
+
+
+
+
+=====
+
+
+
+
+2. Text Summarization using Hugging Face Transformer
+Scenario: Summarizing long articles using a pre-trained NLP model.
+Work Proof:
+python
+Copy
+Edit
+from transformers import pipeline
+
+# Load the summarization model
+summarizer = pipeline("summarization")
+
+# Sample long text
+text = """Machine learning is a method of data analysis that automates analytical model building. 
+Using algorithms that iteratively learn from data, machine learning allows computers to find hidden insights 
+without being explicitly programmed where to look."""
+
+# Generate summary
+summary = summarizer(text, max_length=30, min_length=10, do_sample=False)
+print("Summarized Text:\n", summary[0]['summary_text'])
+Outcome: The model extracts key information, providing concise summaries for long documents.
+
+
+
+=====
+
+
+
+
+3. Hyperparameter Tuning using Grid Search in Random Forest
+Scenario: Optimizing a Random Forest classifier using Grid Search for better model performance.
+Work Proof:
+python
+Copy
+Edit
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+# Load dataset
+iris = load_iris()
+X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+
+# Define parameter grid
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 10, 20],
+    'min_samples_split': [2, 5, 10]
+}
+
+# Grid search with cross-validation
+grid_search = GridSearchCV(RandomForestClassifier(random_state=42), param_grid, cv=5, scoring='accuracy')
+grid_search.fit(X_train, y_train)
+
+print("Best Parameters:", grid_search.best_params_)
+print("Best Accuracy:", grid_search.best_score_)
+Outcome: Finds the best hyperparameters to improve model accuracy using Grid Search.
