@@ -1,0 +1,59 @@
+SQLread.md
+
+Work proof
+
+### 1. Database Performance Optimization (Indexing & Query Tuning)
+   - Scenario: Optimizing query performance in a large e-commerce database.  
+   - SQL Proof:  
+     ```sql
+     -- Creating an index to speed up searches on the 'orders' table
+     CREATE INDEX idx_customer_id ON orders (customer_id);
+
+     -- Checking query execution time before and after indexing
+     EXPLAIN ANALYZE 
+     SELECT * FROM orders WHERE customer_id = 12345;
+     ```
+   - Outcome: This indexing significantly reduces query execution time for retrieving customer orders.  
+
+---
+
+### 2. Data Cleaning & Standardization
+   - Scenario: A company has inconsistent email formats in their customer database.  
+   - SQL Proof:  
+     ```sql
+     -- Standardizing all emails to lowercase
+     UPDATE customers 
+     SET email = LOWER(email) 
+     WHERE email ~ '[A-Z]';
+
+     -- Removing trailing spaces from customer names
+     UPDATE customers 
+     SET customer_name = TRIM(customer_name) 
+     WHERE customer_name LIKE '% ';
+     ```
+   - Outcome: This ensures uniform email storage and removes unnecessary spaces from names, improving data quality.  
+
+---
+
+### 3. Automated Daily Sales Report Using Stored Procedure  
+   - Scenario: A retail company needs a daily summary of sales transactions.  
+   - SQL Proof:  
+     ```sql
+     CREATE PROCEDURE GenerateDailySalesReport()
+     LANGUAGE plpgsql
+     AS $$
+     BEGIN
+         INSERT INTO daily_sales_report (report_date, total_sales, total_orders)
+         SELECT 
+             CURRENT_DATE, 
+             SUM(order_amount), 
+             COUNT(order_id) 
+         FROM orders
+         WHERE order_date = CURRENT_DATE;
+     END;
+     $$;
+
+     -- Executing the stored procedure
+     CALL GenerateDailySalesReport();
+     ```
+   - Outcome: This automates daily sales reporting, ensuring data is logged consistently.  
