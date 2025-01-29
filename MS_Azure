@@ -1,0 +1,25 @@
+MS_Azure_Read.md
+
+1. Azure Virtual Machine (VM) Setup & Auto-Shutdown for Cost Optimization
+Scenario: Deployed a Linux VM in Azure and configured auto-shutdown to reduce costs.
+Work Proof:
+Created a Standard B2s Linux VM using Azure CLI:
+sh
+Copy
+Edit
+az vm create --resource-group MyResourceGroup \
+             --name MyLinuxVM \
+             --image UbuntuLTS \
+             --admin-username azureuser \
+             --generate-ssh-keys \
+             --size Standard_B2s
+Configured auto-shutdown using Azure PowerShell:
+powershell
+Copy
+Edit
+$resourceGroup = "MyResourceGroup"
+$vmName = "MyLinuxVM"
+$time = "19:00" # Auto-shutdown time in UTC
+
+Set-AzVM -ResourceGroupName $resourceGroup -Name $vmName -AutoShutdownTime $time
+Outcome: The VM automatically shuts down at 7:00 PM UTC, reducing unnecessary Azure compute costs.
